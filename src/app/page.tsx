@@ -1,9 +1,8 @@
-import ProductList from '../components/ProductList';
+import ProductList from '../components/PLP/ProductList';
 
 const HomePage: React.FC = () => {
   return (
     <div>
-      <h1>Product List</h1>
       <ProductList />
     </div>
   );

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ProductListCard from './ProductListCard';
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState([]);
@@ -40,6 +41,7 @@ const ProductList: React.FC = () => {
             },
           });
           setProducts(response.data._embedded.items);
+          console.log(response.data._embedded.items);
         } catch (error) {
           console.error('Error fetching products:', error);
         }
@@ -52,14 +54,21 @@ const ProductList: React.FC = () => {
   }, [token]);
 
   return (
-    <div>
-      <h1>Products</h1>
-      <ul>
-        {products.map((product: any) => (
-          <li key={product.uuid}>{product.values.name[0].data}</li>
-        ))}
-      </ul>
+    <>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Products</h1>
+      
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {products.map((product: any) => (
+            <ProductListCard key={product.uuid} product={product} />
+          ))}
+        </div>
+  
     </div>
+    
+    </>
+    
+
   );
 };
 
