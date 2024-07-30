@@ -4,7 +4,7 @@ export interface AkeneoListProduct {
   values: {
       name: { data: string }[];
       price: { data: { amount: string; currency: string }[]}[];
-      image_1?: { data: string }[]; 
+      image_1?: { _links: {download:{href: string}}}[]; 
   };
 }
 
