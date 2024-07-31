@@ -48,7 +48,7 @@ const ProductListCard: React.FC<ProductListCardProps> = ({ product, accessToken 
         <img 
           src={imageSrc} 
           alt={name} 
-          className="w-full h-[231px] object-cover rounded-t-md" 
+          className="w-[200px] h-[180px] object-cover rounded-t-md" 
         />
       </CardHeader>
       <CardContent className="text-white">
