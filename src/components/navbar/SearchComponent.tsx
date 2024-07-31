@@ -4,13 +4,14 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader } from "@/components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ListProduct } from "@/types/listProduct";
+import ProductListCard from "@/components/PLP/ProductListCard"; // Import your ProductListCard component
+import { AkeneoListProduct } from "@/types/akeneoListProduct";
 
 const SearchComponent = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<ListProduct[]>([]);
+  const [results, setResults] = useState<AkeneoListProduct[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
@@ -23,6 +24,7 @@ const SearchComponent = () => {
       }
       const searchResults = await response.json();
       setResults(searchResults);
+      console.log(searchResults);
     } catch (err) {
       setError("An error occurred while searching. Please try again.");
     } finally {
@@ -36,18 +38,6 @@ const SearchComponent = () => {
     setResults([]);
     setError(null);
   };
-
-  const renderProducts = (products: ListProduct[]) => (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      {products.map((product) => (
-        <div key={product.id} className="bg-zinc-950 border-zinc-900 p-2">
-          <img src={product.image} alt={product.name} className="w-full h-[231px] object-cover rounded-md" />
-          <p className="text-white text-lg">{product.name}</p>
-          <p className="text-white text-sm">{product.price}</p>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <Dialog open={dialogOpen}>
@@ -91,7 +81,16 @@ const SearchComponent = () => {
           {!loading && results.length > 0 && (
             <>
               <p className="text-white text-lg">Search Results for {query}</p>
-              {renderProducts(results)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {results.map((product) => (
+                  <ProductListCard
+                    key={product.uuid}
+                    product={product}
+                    accessToken={null}
+                    
+                  />
+                ))}
+              </div>
             </>
           )}
         </div>
