@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import ProductListCard from "@/components/PLP/ProductListCard"; // Import your ProductListCard component
+import ProductListCard from "@/components/PLP/ProductListCard";
 import { AkeneoListProduct } from "@/types/akeneoListProduct";
+import { debounce } from "@/utils/debounce";
+import fetchAkeneoToken from "@/utils/fetchAkeneoToken"; // Import fetchAkeneoToken
 
 const SearchComponent = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -13,23 +15,57 @@ const SearchComponent = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<AkeneoListProduct[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const handleSearch = async () => {
+  // Fetch the access token
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await fetchAkeneoToken();
+        setAccessToken(token);
+      } catch (err) {
+        console.error('Failed to fetch access token:', err);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  const fetchSearchResults = async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      setResults([]);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Pass the access token
+        },
+      });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const searchResults = await response.json();
       setResults(searchResults);
-      console.log(searchResults);
     } catch (err) {
       setError("An error occurred while searching. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => fetchSearchResults(searchQuery), 300),
+    [accessToken] // Include accessToken in dependency array
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    debouncedSearch(newQuery);
   };
 
   const handleCloseDialog = () => {
@@ -53,10 +89,10 @@ const SearchComponent = () => {
               type="text"
               placeholder="Search products..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               className="flex-grow ml-2"
             />
-            <Button onClick={handleSearch} className="ml-2 transition-colors" disabled={loading}>
+            <Button onClick={() => fetchSearchResults(query)} className="ml-2 transition-colors" disabled={loading || !accessToken}>
               <FaSearch />
             </Button>
             <Button onClick={handleCloseDialog} className="ml-2 transition-colors">
@@ -86,8 +122,7 @@ const SearchComponent = () => {
                   <ProductListCard
                     key={product.uuid}
                     product={product}
-                    accessToken={null}
-                    
+                    accessToken={accessToken} // Pass the access token to the ProductListCard
                   />
                 ))}
               </div>

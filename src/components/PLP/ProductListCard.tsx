@@ -17,11 +17,9 @@ const ProductListCard: React.FC<ProductListCardProps> = ({ product, accessToken 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // Prevents state updates if the component is unmounted
-
+    let isMounted = true; 
     if (imageUrl !== "/default-image.png" && accessToken) {
       const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}&token=${encodeURIComponent(accessToken)}`;
-      
       fetch(proxyUrl)
         .then(response => response.blob())
         .then(blob => {
