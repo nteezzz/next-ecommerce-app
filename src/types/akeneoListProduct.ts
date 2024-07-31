@@ -3,7 +3,7 @@ export interface AkeneoListProduct {
   uuid: string;
   values: {
       name: { data: string }[];
-      price: { data: { amount: string; currency: string }[]}[];
+      price: { data: { amount: string; }[]}[];
       image_1?: { _links: {download:{href: string}}}[]; 
   };
 }

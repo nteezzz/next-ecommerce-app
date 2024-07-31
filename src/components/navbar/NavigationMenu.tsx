@@ -125,12 +125,12 @@ export function NavMenu() {
           <NavigationMenuItem>
             <Link href="/home" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <span className="font-bold text-lg">NteezCart</span>
+                <span className="font-bold text-2xl">NteezCart</span>
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Shop</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="text-lg">Shop</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
@@ -161,7 +161,7 @@ export function NavMenu() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="text-lg" >Categories</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {categories.map((category) => (
@@ -177,7 +177,7 @@ export function NavMenu() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Customer Service</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="text-lg">Customer Service</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 {customerServiceItems.map((item) => (
@@ -192,13 +192,13 @@ export function NavMenu() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <Link href="/blog" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink  className={navigationMenuTriggerStyle()}>
                 Blog
               </NavigationMenuLink>
             </Link>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem className="flex-1">
             <SearchComponent/>
           </NavigationMenuItem>
